@@ -1,9 +1,0 @@
-C:\TeamProjects\Ecommerce\Ecommerce.API\obj\Debug\net10.0\Ecommerce.API.csproj.AssemblyReference.cache
-C:\TeamProjects\Ecommerce\Ecommerce.API\obj\Debug\net10.0\rpswa.dswa.cache.json
-C:\TeamProjects\Ecommerce\Ecommerce.API\obj\Debug\net10.0\Ecommerce.API.GeneratedMSBuildEditorConfig.editorconfig
-C:\TeamProjects\Ecommerce\Ecommerce.API\obj\Debug\net10.0\Ecommerce.API.AssemblyInfoInputs.cache
-C:\TeamProjects\Ecommerce\Ecommerce.API\obj\Debug\net10.0\Ecommerce.API.AssemblyInfo.cs
-C:\TeamProjects\Ecommerce\Ecommerce.API\obj\Debug\net10.0\Ecommerce.API.csproj.CoreCompileInputs.cache
-C:\TeamProjects\Ecommerce\Ecommerce.API\obj\Debug\net10.0\Ecommerce.API.MvcApplicationPartsAssemblyInfo.cs
-C:\TeamProjects\Ecommerce\Ecommerce.API\obj\Debug\net10.0\Ecommerce.API.MvcApplicationPartsAssemblyInfo.cache
-C:\TeamProjects\Ecommerce\Ecommerce.API\obj\Debug\net10.0\Ecommerce.API.sourcelink.json

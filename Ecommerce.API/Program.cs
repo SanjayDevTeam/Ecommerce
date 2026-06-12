@@ -14,7 +14,7 @@ using System.Text;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
-
+using Microsoft.Extensions.Logging;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.File(
@@ -62,7 +62,7 @@ JwtBearerDefaults.AuthenticationScheme)
         };
 });
 
-builder.Services.AddMemoryCache();
+//builder.Services.AddMemoryCache();
 builder.Services.AddResponseCompression();
 builder.Services.AddHealthChecks();
 
@@ -89,6 +89,11 @@ builder.Services.AddRateLimiter(options =>
 
             limiterOptions.QueueLimit = 0;
         });
+});
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379";
 });
 
 var app = builder.Build();

@@ -1,3 +1,4 @@
+using Ecommerce.API.Configurations;
 using Ecommerce.API.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,12 +14,10 @@ public class EcommerceDbContext : DbContext
     public DbSet<Product> Products => Set<Product>();
     public DbSet<User> Users => Set<User>();
 
-     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Product>()
-            .Property(p => p.Price)
-            .HasPrecision(18, 2);
+ protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.ApplyConfiguration(new ProductConfiguration());
 
-        base.OnModelCreating(modelBuilder);
-    }
+    base.OnModelCreating(modelBuilder);
+}
 }

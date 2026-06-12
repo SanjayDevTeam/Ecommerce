@@ -2,6 +2,7 @@ using Ecommerce.API.DTOs;
 using Ecommerce.API.Entities;
 using Ecommerce.API.Interfaces;
 using AutoMapper;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Ecommerce.API.Services;
 
@@ -9,11 +10,13 @@ public class ProductService : IProductService
 {
     private readonly IProductRepository _repository;
     private readonly IMapper _mapper;
+    private readonly IMemoryCache _cache;
 
-    public ProductService(IProductRepository repository,IMapper mapper)
+    public ProductService(IProductRepository repository,IMapper mapper, IMemoryCache cache)
     {
         _repository = repository;
         _mapper = mapper;
+        _cache = cache;
     }
 
     public async Task<List<ProductResponseDto>> GetAllAsync()
@@ -31,4 +34,29 @@ public class ProductService : IProductService
 
         return _mapper.Map<ProductResponseDto>(product);
     }
+
+    public async Task<List<ProductResponseDto>>
+GetProductsAsync(ProductQueryParams query)
+{
+    string key =
+$"products-{query.Page}-{query.PageSize}";
+
+if (_cache.TryGetValue(key,
+out List<ProductResponseDto>? cachedProducts))
+{
+    return cachedProducts!;
+}
+
+    var products = await _repository.GetProductsAsync(query);
+    var result =
+_mapper.Map<List<ProductResponseDto>>(products);
+
+  _cache.Set(
+key,
+result,
+TimeSpan.FromMinutes(5));
+
+return result;
+}
+
 }

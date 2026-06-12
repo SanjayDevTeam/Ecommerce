@@ -11,6 +11,9 @@ using Ecommerce.API.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 
 
 Log.Logger = new LoggerConfiguration()
@@ -59,6 +62,10 @@ JwtBearerDefaults.AuthenticationScheme)
         };
 });
 
+builder.Services.AddMemoryCache();
+builder.Services.AddResponseCompression();
+builder.Services.AddHealthChecks();
+
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -69,6 +76,20 @@ builder.Services.AddValidatorsFromAssemblyContaining<ProductCreateValidator>();
 
 builder.Services.AddScoped<JwtService>();
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter(
+        "fixed",
+        limiterOptions =>
+        {
+            limiterOptions.PermitLimit = 100;
+
+            limiterOptions.Window =
+                TimeSpan.FromMinutes(1);
+
+            limiterOptions.QueueLimit = 0;
+        });
+});
 
 var app = builder.Build();
 
@@ -81,6 +102,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<ExceptionMiddleware>();
 
+app.UseMiddleware<RequestTimingMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
@@ -89,6 +112,11 @@ app.UseAuthorization();
 
 app.UseSerilogRequestLogging();
 
+app.UseRateLimiter();
+
 app.MapControllers();
+
+app.MapHealthChecks("/health");
+
 
 app.Run();

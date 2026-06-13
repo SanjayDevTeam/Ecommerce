@@ -76,6 +76,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<ProductCreateValidator>();
 
 builder.Services.AddScoped<JwtService>();
 
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 builder.Services.AddRateLimiter(options =>
 {
     options.AddFixedWindowLimiter(
@@ -95,6 +97,9 @@ builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = "localhost:6379";
 });
+
+builder.Services
+    .AddHostedService<InventoryBackgroundService>();
 
 var app = builder.Build();
 
